@@ -146,6 +146,12 @@ def ads():
     type=datetime.datetime.fromisoformat,
 )
 @click.option(
+    "--created-before",
+    default=None,
+    help="Only pull posts created before the specified datetime (specific datetime NOT included), e.g. 2021-10-02 or 2011-11-04T00:05:23+04:00 (defaults to none). If a timezone is not specified, UTC is assumed.",
+    type=datetime.datetime.fromisoformat,
+)
+@click.option(
     "--pinned/--all", default=False, help="Only pull pinned posts (defaults to all)"
 )
 def statuses(

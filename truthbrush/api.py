@@ -8,6 +8,7 @@ import json
 import logging
 import os
 from dotenv import load_dotenv
+import curl_cffi
 
 load_dotenv()  # take environment variables from .env.
 
@@ -366,6 +367,7 @@ class Api:
 
         Params:
             created_after : timezone aware datetime object
+            created_before : 
             since_id : number or string
 
         Returns a list of posts in reverse chronological order,
@@ -407,6 +409,10 @@ class Api:
             if not isinstance(result, list):
                 logger.error(f"Result is not a list (it's a {type(result)}): {result}")
 
+            # in order to raise the speed
+            if date_parse.parse(result[0]["created_at"]).replace(tzinfo=timezone.utc) > created_before:
+                continue
+
             posts = sorted(
                 result, key=lambda k: k["id"], reverse=True
             )  # reverse chronological order (recent first, older last)
@@ -430,7 +436,7 @@ class Api:
                     tzinfo=timezone.utc
                 )
 
-                if (created_before and post_at >= created_before):
+                if created_before < post_at:
                     continue
 
                 if (created_after and post_at <= created_after) or (
