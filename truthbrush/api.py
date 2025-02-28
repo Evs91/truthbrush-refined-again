@@ -358,6 +358,7 @@ class Api:
         replies=False,
         verbose=False,
         created_after: datetime = None,
+        created_before: datetime = None,
         since_id=None,
         pinned=False,
     ) -> List[dict]:
@@ -428,6 +429,10 @@ class Api:
                 post_at = date_parse.parse(post["created_at"]).replace(
                     tzinfo=timezone.utc
                 )
+
+                if (created_before and post_at >= created_before):
+                    continue
+
                 if (created_after and post_at <= created_after) or (
                     since_id and post["id"] <= since_id
                 ):

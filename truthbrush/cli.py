@@ -152,6 +152,7 @@ def statuses(
     username: str,
     replies: bool = False,
     created_after: date = None,
+    created_before: date = None,
     pinned: bool = False,
 ):
     """Pull a user's statuses"""
@@ -160,8 +161,11 @@ def statuses(
     if created_after and created_after.tzinfo is None:
         created_after = created_after.replace(tzinfo=datetime.timezone.utc)
 
+    if created_before and created_before.tzinfo is None:
+        created_before = created_before.replace(tzinfo=datetime.timezone.utc)
+
     for page in api.pull_statuses(
-        username, created_after=created_after, replies=replies, pinned=pinned
+        username, created_after=created_after, replies=replies, pinned=pinned, created_before=created_before
     ):
         print(json.dumps(page))
 
