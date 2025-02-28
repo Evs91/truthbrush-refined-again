@@ -154,12 +154,16 @@ def ads():
 @click.option(
     "--pinned/--all", default=False, help="Only pull pinned posts (defaults to all)"
 )
+@click.option(
+    "--drop", default="", help="Drop certain useless keys of the retured json. e.g. \"account meta\"(make sure to use colon if multiple keys are required)"
+)
 def statuses(
     username: str,
     replies: bool = False,
     created_after: date = None,
     created_before: date = None,
     pinned: bool = False,
+    drop: str = ""
 ):
     """Pull a user's statuses"""
 

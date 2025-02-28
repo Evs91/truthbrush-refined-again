@@ -362,6 +362,7 @@ class Api:
         created_before: datetime = None,
         since_id=None,
         pinned=False,
+        drop: str = ""
     ) -> List[dict]:
         """Pull the given user's statuses.
 
@@ -378,6 +379,7 @@ class Api:
         user_id = self.lookup(username)["id"]
         page_counter = 0
         keep_going = True
+        drop_keys = drop.split()
         while keep_going:
             try:
                 url = f"/v1/accounts/{user_id}/statuses"
@@ -429,6 +431,10 @@ class Api:
             for post in posts:
                 post["_pulled"] = datetime.now().isoformat()
 
+                # drop certain useless keys
+                for key in drop_keys:
+                    post.pop(key, None)
+                
                 # only keep posts created after the specified date
                 # exclude posts created before the specified date
                 # since the page is listed in reverse chronology, we don't need any remaining posts on this page either
