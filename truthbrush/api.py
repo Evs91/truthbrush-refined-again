@@ -446,8 +446,7 @@ class Api:
                 post_at = date_parse.parse(post["created_at"]).replace(
                     tzinfo=timezone.utc
                 )
-
-                if created_before < post_at:
+                if created_before and created_before < post_at:
                     continue
 
                 if (created_after and post_at <= created_after) or (
