@@ -361,6 +361,7 @@ class Api:
         created_after: datetime = None,
         created_before: datetime = None,
         since_id=None,
+        max_id : str = None,
         pinned=False,
         drop: str = ""
     ) -> List[dict]:
@@ -368,14 +369,17 @@ class Api:
 
         Params:
             created_after : timezone aware datetime object
-            created_before : 
+            created_before : timezone aware datetime object
             since_id : number or string
+            max_id: number or string
 
         Returns a list of posts in reverse chronological order,
             or an empty list if not found.
         """
 
         params = {}
+        if max_id:
+            params["max_id"] = max_id
         user_id = self.lookup(username)["id"]
         page_counter = 0
         keep_going = True
@@ -410,10 +414,11 @@ class Api:
 
             if not isinstance(result, list):
                 logger.error(f"Result is not a list (it's a {type(result)}): {result}")
-
-            # in order to raise the speed
-            if date_parse.parse(result[0]["created_at"]).replace(tzinfo=timezone.utc) > created_before:
-                continue
+            
+            if created_before:
+                # in order to raise the speed
+                if date_parse.parse(result[0]["created_at"]).replace(tzinfo=timezone.utc) > created_before:
+                    continue
 
             posts = sorted(
                 result, key=lambda k: k["id"], reverse=True
