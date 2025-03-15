@@ -23,8 +23,7 @@ logging.basicConfig(
 BASE_URL = "https://truthsocial.com"
 API_BASE_URL = "https://truthsocial.com/api"
 USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 "
-    "Safari/537.36"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
 )
 
 # Oauth client credentials, from https://truthsocial.com/packs/js/application-d77ef3e9148ad1d0624c.js
@@ -50,7 +49,7 @@ class Api:
         password=TRUTHSOCIAL_PASSWORD,
         token=TRUTHSOCIAL_TOKEN,
     ):
-        self.ratelimit_max = 300
+        self.ratelimit_max = 100
         self.ratelimit_remaining = None
         self.ratelimit_reset = None
         self.__username = username
